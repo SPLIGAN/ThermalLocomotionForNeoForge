@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "minecraft:minecart"
+    },
+    "F": {
+      "item": "thermal:energy_cell_frame"
+    },
+    "I": {
+      "tag": "c:ingots/lead"
+    },
+    "R": {
+      "tag": "c:storage_blocks/redstone"
+    }
+  },
+  "pattern": [
+    " F ",
+    "ICI",
+    " R "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thermal:energy_minecart"
+  }
+}

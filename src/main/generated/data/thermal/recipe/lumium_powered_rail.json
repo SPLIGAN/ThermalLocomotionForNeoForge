@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "c:ingots/lumium"
+    },
+    "X": {
+      "item": "minecraft:powered_rail"
+    }
+  },
+  "pattern": [
+    "XIX",
+    "XIX",
+    "XIX"
+  ],
+  "result": {
+    "count": 6,
+    "id": "thermal:lumium_powered_rail"
+  }
+}

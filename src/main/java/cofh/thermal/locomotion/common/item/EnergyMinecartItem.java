@@ -3,6 +3,7 @@ package cofh.thermal.locomotion.common.item;
 import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.lib.api.item.IEnergyContainerItem;
 import cofh.lib.common.energy.EnergyStorageCoFH;
+import cofh.lib.util.CoFHItemData;
 import cofh.thermal.locomotion.common.entity.EnergyMinecart;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -11,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 import static cofh.core.util.helpers.AugmentableHelper.getPropertyWithDefault;
@@ -19,6 +20,7 @@ import static cofh.core.util.helpers.AugmentableHelper.setAttributeFromAugmentMa
 import static cofh.lib.api.ContainerType.ENERGY;
 import static cofh.lib.util.constants.NBTTags.*;
 import static cofh.lib.util.helpers.StringHelper.*;
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 
 public class EnergyMinecartItem extends AugmentableMinecartItem implements IEnergyContainerItem {
 
@@ -42,10 +44,11 @@ public class EnergyMinecartItem extends AugmentableMinecartItem implements IEner
 
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
-        CompoundTag subTag = container.getTagElement(TAG_PROPERTIES);
-        if (subTag == null) {
+        CompoundTag root = CoFHItemData.getTag(container);
+        if (!root.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
             return;
         }
+        CompoundTag subTag = root.getCompound(TAG_PROPERTIES);
         setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
         setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_STORAGE);
         setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_RF_XFER);
@@ -56,11 +59,11 @@ public class EnergyMinecartItem extends AugmentableMinecartItem implements IEner
     @Override
     public CompoundTag getOrCreateEnergyTag(ItemStack container) {
 
-        CompoundTag tag = container.getOrCreateTag();
+        CompoundTag tag = CoFHItemData.getTag(container);
         if (!tag.contains(TAG_ENERGY_MAX)) {
-            new EnergyStorageCoFH(EnergyMinecart.BASE_CAPACITY, EnergyMinecart.BASE_XFER).writeWithParams(tag);
+            CoFHItemData.updateTag(container, root -> new EnergyStorageCoFH(EnergyMinecart.BASE_CAPACITY, EnergyMinecart.BASE_XFER).writeWithParams(root));
         }
-        return container.getTag();
+        return CoFHItemData.getTag(container);
     }
 
     @Override
@@ -91,7 +94,7 @@ public class EnergyMinecartItem extends AugmentableMinecartItem implements IEner
     @Override
     public void updateAugmentState(ItemStack container, List<ItemStack> augments) {
 
-        container.getOrCreateTag().put(TAG_PROPERTIES, new CompoundTag());
+        CoFHItemData.updateTag(container, tag -> tag.put(TAG_PROPERTIES, new CompoundTag()));
         for (ItemStack augment : augments) {
             CompoundTag augmentData = AugmentDataHelper.getAugmentData(augment);
             if (augmentData == null) {

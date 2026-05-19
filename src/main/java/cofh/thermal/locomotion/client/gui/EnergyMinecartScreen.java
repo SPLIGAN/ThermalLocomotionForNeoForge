@@ -14,7 +14,7 @@ import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 public class EnergyMinecartScreen extends ContainerScreenCoFH<EnergyMinecartMenu> {
 
     public static final String TEX_PATH = ID_THERMAL + ":textures/gui/container/energy_minecart.png";
-    public static final ResourceLocation TEXTURE = new ResourceLocation(TEX_PATH);
+    public static final ResourceLocation TEXTURE = ResourceLocation.parse(TEX_PATH);
 
     public EnergyMinecartScreen(EnergyMinecartMenu container, Inventory inv, Component titleIn) {
 

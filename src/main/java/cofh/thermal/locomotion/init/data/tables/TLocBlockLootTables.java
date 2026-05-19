@@ -1,12 +1,18 @@
 package cofh.thermal.locomotion.init.data.tables;
 
 import cofh.lib.init.data.loot.BlockLootSubProviderCoFH;
+import net.minecraft.core.HolderLookup;
 
 import static cofh.thermal.core.ThermalCore.BLOCKS;
 import static cofh.thermal.core.ThermalCore.ITEMS;
 import static cofh.thermal.locomotion.init.registries.TLocIDs.*;
 
 public class TLocBlockLootTables extends BlockLootSubProviderCoFH {
+
+    public TLocBlockLootTables(HolderLookup.Provider registries) {
+
+        super(registries);
+    }
 
     @Override
     protected void generate() {

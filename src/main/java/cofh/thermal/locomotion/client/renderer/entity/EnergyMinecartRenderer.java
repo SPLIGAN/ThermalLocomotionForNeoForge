@@ -22,11 +22,11 @@ import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 
 public class EnergyMinecartRenderer<T extends AbstractMinecart> extends EntityRenderer<T> {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(ID_THERMAL + ":textures/entity/energy_minecart.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "textures/entity/energy_minecart.png");
     protected final EntityModel<T> model;
 
     protected final AABB storageAABB = new AABB(-8.0 / 16.0, -7.0 / 16.0, -6.0 / 16.0, 8.0 / 16.0, 4.0 / 16.0, 6.0 / 16.0);
-    protected final ResourceLocation storageLoc = new ResourceLocation(ID_THERMAL, "block/cells/energy_cell_center");
+    protected final ResourceLocation storageLoc = ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "block/cells/energy_cell_center");
 
     public EnergyMinecartRenderer(EntityRendererProvider.Context ctx) {
 
@@ -93,7 +93,7 @@ public class EnergyMinecartRenderer<T extends AbstractMinecart> extends EntityRe
         poseStackIn.scale(-1.0F, -1.0F, 1.0F);
         this.model.setupAnim(entityIn, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer ivertexbuilder = bufferIn.getBuffer(this.model.renderType(this.getTextureLocation(entityIn)));
-        this.model.renderToBuffer(poseStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, -1);
 
         ivertexbuilder = bufferIn.getBuffer(RenderType.translucent());
         RenderHelper.renderCuboid(storageAABB, poseStackIn, ivertexbuilder, packedLightIn, 1.0F, 1.0F, 1.0F, 1.0F, RenderHelper.getTexture(storageLoc));

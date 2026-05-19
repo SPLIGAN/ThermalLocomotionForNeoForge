@@ -8,11 +8,11 @@ import cofh.thermal.locomotion.client.renderer.entity.UnderwaterMinecartRenderer
 import cofh.thermal.locomotion.client.renderer.entity.model.EnergyMinecartModel;
 import cofh.thermal.locomotion.client.renderer.entity.model.FluidMinecartModel;
 import cofh.thermal.locomotion.client.renderer.entity.model.UnderwaterMinecartModel;
+import cofh.thermal.locomotion.init.data.TLocDataGen;
 import cofh.thermal.locomotion.init.registries.TLocBlocks;
 import cofh.thermal.locomotion.init.registries.TLocContainers;
 import cofh.thermal.locomotion.init.registries.TLocEntities;
 import cofh.thermal.locomotion.init.registries.TLocItems;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.neoforged.bus.api.IEventBus;
@@ -22,6 +22,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 import static cofh.lib.util.constants.ModIds.ID_THERMAL_LOCOMOTION;
 import static cofh.thermal.core.ThermalCore.BLOCKS;
@@ -37,10 +38,13 @@ public class ThermalLocomotion {
 
         setFeatureFlags();
 
+        modEventBus.register(TLocDataGen.class);
+
         modEventBus.addListener(this::entityLayerSetup);
         modEventBus.addListener(this::entityRendererSetup);
         modEventBus.addListener(this::capabilitySetup);
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::menuScreenSetup);
         modEventBus.addListener(this::clientSetup);
 
         TLocBlocks.register();
@@ -80,17 +84,17 @@ public class ThermalLocomotion {
 
     private void clientSetup(final FMLClientSetupEvent event) {
 
-        event.enqueueWork(this::registerGuiFactories);
         event.enqueueWork(this::registerRenderLayers);
+    }
+
+    private void menuScreenSetup(final RegisterMenuScreensEvent event) {
+
+        event.register(ENERGY_CART_CONTAINER.get(), EnergyMinecartScreen::new);
+        event.register(FLUID_CART_CONTAINER.get(), FluidMinecartScreen::new);
     }
     // endregion
 
     // region HELPERS
-    private void registerGuiFactories() {
-
-        MenuScreens.register(ENERGY_CART_CONTAINER.get(), EnergyMinecartScreen::new);
-        MenuScreens.register(FLUID_CART_CONTAINER.get(), FluidMinecartScreen::new);
-    }
 
     private void registerRenderLayers() {
 

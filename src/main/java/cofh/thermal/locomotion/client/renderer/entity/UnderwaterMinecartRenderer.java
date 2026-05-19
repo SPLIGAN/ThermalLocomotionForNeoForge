@@ -19,7 +19,7 @@ import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 
 public class UnderwaterMinecartRenderer<T extends AbstractMinecart> extends EntityRenderer<T> {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(ID_THERMAL + ":textures/entity/underwater_minecart.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "textures/entity/underwater_minecart.png");
     protected final EntityModel<T> model;
 
     public UnderwaterMinecartRenderer(EntityRendererProvider.Context ctx) {
@@ -87,7 +87,7 @@ public class UnderwaterMinecartRenderer<T extends AbstractMinecart> extends Enti
         poseStackIn.scale(-1.0F, -1.0F, 1.0F);
         this.model.setupAnim(entityIn, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer ivertexbuilder = bufferIn.getBuffer(this.model.renderType(this.getTextureLocation(entityIn)));
-        this.model.renderToBuffer(poseStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, -1);
         poseStackIn.popPose();
     }
 

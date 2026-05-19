@@ -143,7 +143,7 @@ public class TLocRecipeProvider extends RecipeProviderCoFH {
 
         ShapedRecipeBuilder.shaped(TOOLS, ITEMS.get(ID_UNDERWATER_CART))
                 .define('C', Items.MINECART)
-                .define('G', Tags.Items.GLASS)
+                .define('G', Blocks.GLASS)
                 .define('P', Items.PRISMARINE)
                 .pattern("GGG")
                 .pattern("GCG")

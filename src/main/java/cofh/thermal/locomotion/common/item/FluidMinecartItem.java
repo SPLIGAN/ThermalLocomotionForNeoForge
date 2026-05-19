@@ -6,6 +6,7 @@ import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.api.item.IColorableItem;
 import cofh.lib.api.item.IFluidContainerItem;
 import cofh.lib.common.fluid.FluidStorageCoFH;
+import cofh.lib.util.CoFHItemData;
 import cofh.lib.util.helpers.StringHelper;
 import cofh.thermal.locomotion.common.entity.FluidMinecart;
 import net.minecraft.ChatFormatting;
@@ -16,7 +17,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 import static cofh.core.util.helpers.AugmentableHelper.getPropertyWithDefault;
@@ -25,6 +26,7 @@ import static cofh.core.util.helpers.FluidHelper.addPotionTooltip;
 import static cofh.lib.api.ContainerType.FLUID;
 import static cofh.lib.util.constants.NBTTags.*;
 import static cofh.lib.util.helpers.StringHelper.*;
+import static net.minecraft.nbt.Tag.TAG_COMPOUND;
 import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class FluidMinecartItem extends AugmentableMinecartItem implements IFluidContainerItem, IColorableItem {
@@ -57,10 +59,11 @@ public class FluidMinecartItem extends AugmentableMinecartItem implements IFluid
 
     protected void setAttributesFromAugment(ItemStack container, CompoundTag augmentData) {
 
-        CompoundTag subTag = container.getTagElement(TAG_PROPERTIES);
-        if (subTag == null) {
+        CompoundTag root = CoFHItemData.getTag(container);
+        if (!root.contains(TAG_PROPERTIES, TAG_COMPOUND)) {
             return;
         }
+        CompoundTag subTag = root.getCompound(TAG_PROPERTIES);
         setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_BASE_MOD);
         setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_FLUID_STORAGE);
         setAttributeFromAugmentMax(subTag, augmentData, TAG_AUGMENT_FLUID_CREATIVE);
@@ -70,18 +73,11 @@ public class FluidMinecartItem extends AugmentableMinecartItem implements IFluid
     @Override
     public CompoundTag getOrCreateTankTag(ItemStack container) {
 
-        CompoundTag tag = container.getOrCreateTag();
+        CompoundTag tag = CoFHItemData.getTag(container);
         if (!tag.contains(TAG_CAPACITY)) {
-            new FluidStorageCoFH(FluidMinecart.BASE_CAPACITY).write(tag);
+            CoFHItemData.updateTag(container, root -> new FluidStorageCoFH(FluidMinecart.BASE_CAPACITY).write(root));
         }
-        return container.getTag();
-    }
-
-    @Override
-    public FluidStack getFluid(ItemStack container) {
-
-        CompoundTag tag = getOrCreateTankTag(container);
-        return FluidStack.loadFluidStackFromNBT(tag);
+        return CoFHItemData.getTag(container);
     }
 
     @Override
@@ -98,7 +94,7 @@ public class FluidMinecartItem extends AugmentableMinecartItem implements IFluid
     @Override
     public void updateAugmentState(ItemStack container, List<ItemStack> augments) {
 
-        container.getOrCreateTag().put(TAG_PROPERTIES, new CompoundTag());
+        CoFHItemData.updateTag(container, tag -> tag.put(TAG_PROPERTIES, new CompoundTag()));
         for (ItemStack augment : augments) {
             CompoundTag augmentData = AugmentDataHelper.getAugmentData(augment);
             if (augmentData == null) {

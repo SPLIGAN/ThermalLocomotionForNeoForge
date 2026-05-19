@@ -1,0 +1,51 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version_range}"
+issueTrackerURL = "https://github.com/cofh/feedback"
+license = "CoFH - Don't Be A Jerk (Learn, Don't Steal)"
+
+[[accessTransformers]]
+file = "META-INF/accesstransformer.cfg"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+updateJSONURL = "https://raw.github.com/cofh/version/main/thermal/update_locomotion.json"
+displayURL = "https://teamcofh.com/"
+logoFile = "thermal_locomotion.png"
+itemIcon = "thermal:underwater_minecart"
+credits = "Team CoFH"
+authors = "King Lemming"
+description = '''
+Thermal hits the tracks!
+
+Contains the "railyard" of the Thermal Series - Rails and Minecarts to expand rail-centric gameplay.
+'''
+
+[[dependencies.${mod_id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_version_range}"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${neo_version},)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "cofh_core"
+type = "required"
+versionRange = "[${cofh_core_version},${cofh_core_max_version})"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "thermal"
+type = "required"
+versionRange = "[${thermal_core_version},${thermal_core_max_version})"
+ordering = "AFTER"
+side = "BOTH"

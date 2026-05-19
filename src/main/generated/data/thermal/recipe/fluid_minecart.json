@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "minecraft:minecart"
+    },
+    "F": {
+      "item": "thermal:fluid_cell_frame"
+    },
+    "I": {
+      "tag": "c:ingots/bronze"
+    },
+    "R": {
+      "item": "thermal:cured_rubber"
+    }
+  },
+  "pattern": [
+    " F ",
+    "ICI",
+    " R "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thermal:fluid_minecart"
+  }
+}

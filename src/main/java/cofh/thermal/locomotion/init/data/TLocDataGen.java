@@ -4,13 +4,9 @@ import cofh.thermal.locomotion.init.data.providers.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-import static cofh.lib.util.constants.ModIds.ID_THERMAL_LOCOMOTION;
-
-@Mod.EventBusSubscriber (bus = Mod.EventBusSubscriber.Bus.MOD, modid = ID_THERMAL_LOCOMOTION)
 public class TLocDataGen {
 
     @SubscribeEvent
@@ -24,7 +20,7 @@ public class TLocDataGen {
         gen.addProvider(event.includeServer(), blockTags);
         gen.addProvider(event.includeServer(), new TLocTagsProvider.Item(output, event.getLookupProvider(), blockTags.contentsGetter(), exFileHelper));
 
-        gen.addProvider(event.includeServer(), new TLocLootTableProvider(output));
+        gen.addProvider(event.includeServer(), new TLocLootTableProvider(output, event.getLookupProvider()));
         gen.addProvider(event.includeServer(), new TLocRecipeProvider(output));
 
         gen.addProvider(event.includeClient(), new TLocBlockStateProvider(output, exFileHelper));

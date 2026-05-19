@@ -6,11 +6,13 @@ import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.FluidHelper;
 import cofh.lib.common.fluid.FluidStorageCoFH;
 import cofh.lib.common.inventory.ItemStorageCoFH;
+import cofh.lib.util.CoFHItemData;
 import cofh.lib.util.Utils;
 import cofh.thermal.lib.common.entity.AugmentableMinecart;
 import cofh.thermal.locomotion.common.inventory.FluidMinecartMenu;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -28,7 +30,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiPredicate;
@@ -90,7 +92,7 @@ public class FluidMinecart extends AugmentableMinecart implements MenuProvider {
             } else {
                 var handler = inputStack.getCapability(Capabilities.FluidHandler.ITEM);
                 if (handler != null) {
-                    int toFill = tank.fill(new FluidStack(handler.getFluidInTank(0), BUCKET_VOLUME), SIMULATE);
+                    int toFill = tank.fill(handler.getFluidInTank(0).copyWithAmount(BUCKET_VOLUME), SIMULATE);
                     if (toFill > 0) {
                         tank.fill(handler.drain(toFill, EXECUTE), EXECUTE);
                         inputSlot.setItemStack(handler.getContainer());
@@ -101,7 +103,7 @@ public class FluidMinecart extends AugmentableMinecart implements MenuProvider {
         if (!outputSlot.isEmpty()) {
             var handler = outputSlot.getItemStack().getCapability(Capabilities.FluidHandler.ITEM);
             if (handler != null) {
-                tank.drain(handler.fill(new FluidStack(tank.getFluidStack(), Math.min(tank.getAmount(), BUCKET_VOLUME)), EXECUTE), EXECUTE);
+                tank.drain(handler.fill(tank.getFluidStack().copyWithAmount(Math.min(tank.getAmount(), BUCKET_VOLUME)), EXECUTE), EXECUTE);
                 outputSlot.setItemStack(handler.getContainer());
             }
         }
@@ -113,18 +115,19 @@ public class FluidMinecart extends AugmentableMinecart implements MenuProvider {
     }
 
     @Override
-    protected void defineSynchedData() {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
 
-        super.defineSynchedData();
-        this.entityData.define(FLUID_STACK_STORED, FluidStack.EMPTY);
-        this.entityData.define(FLUID_STORED, 0);
+        super.defineSynchedData(builder);
+        builder.define(FLUID_STACK_STORED, FluidStack.EMPTY);
+        builder.define(FLUID_STORED, 0);
     }
 
     @Override
     public FluidMinecart onPlaced(ItemStack stack) {
 
-        if (stack.getTag() != null) {
-            tank.read(stack.getTag());
+        CompoundTag nbt = CoFHItemData.getTag(stack);
+        if (!nbt.isEmpty()) {
+            tank.read(nbt);
         }
         super.onPlaced(stack);
         return this;
@@ -155,7 +158,7 @@ public class FluidMinecart extends AugmentableMinecart implements MenuProvider {
     @Override
     public ItemStack createItemStackTag(ItemStack stack) {
 
-        tank.write(stack.getOrCreateTag());
+        CoFHItemData.updateTag(stack, tank::write);
         return super.createItemStackTag(stack);
     }
 

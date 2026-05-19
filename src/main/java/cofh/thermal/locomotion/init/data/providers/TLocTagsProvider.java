@@ -8,7 +8,7 @@ import net.minecraft.tags.BlockTags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 import static cofh.lib.util.constants.ModIds.ID_THERMAL;

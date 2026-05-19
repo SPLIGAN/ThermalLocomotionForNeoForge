@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 
 public class FluidMinecartModel<T extends Entity> extends HierarchicalModel<T> {
 
-    public static final ModelLayerLocation FLUID_MINECART_LAYER = new ModelLayerLocation(new ResourceLocation("thermal:fluid_minecart"), "main");
+    public static final ModelLayerLocation FLUID_MINECART_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath("thermal", "fluid_minecart"), "main");
 
     private final ModelPart root;
 

@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 
 public class UnderwaterMinecartModel<T extends Entity> extends HierarchicalModel<T> {
 
-    public static final ModelLayerLocation UNDERWATER_MINECART_LAYER = new ModelLayerLocation(new ResourceLocation("thermal:underwater_minecart"), "main");
+    public static final ModelLayerLocation UNDERWATER_MINECART_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath("thermal", "underwater_minecart"), "main");
 
     private final ModelPart root;
 

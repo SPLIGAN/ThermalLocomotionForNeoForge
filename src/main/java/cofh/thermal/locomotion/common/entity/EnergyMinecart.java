@@ -4,11 +4,13 @@ import cofh.core.util.helpers.AugmentDataHelper;
 import cofh.core.util.helpers.EnergyHelper;
 import cofh.lib.common.energy.EnergyStorageCoFH;
 import cofh.lib.common.inventory.ItemStorageCoFH;
+import cofh.lib.util.CoFHItemData;
 import cofh.lib.util.Utils;
 import cofh.thermal.lib.common.entity.AugmentableMinecart;
 import cofh.thermal.locomotion.common.inventory.EnergyMinecartMenu;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,7 +26,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -92,17 +94,18 @@ public class EnergyMinecart extends AugmentableMinecart implements MenuProvider 
     }
 
     @Override
-    protected void defineSynchedData() {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
 
-        super.defineSynchedData();
-        this.entityData.define(ENERGY_STORED, 0);
+        super.defineSynchedData(builder);
+        builder.define(ENERGY_STORED, 0);
     }
 
     @Override
     public EnergyMinecart onPlaced(ItemStack stack) {
 
-        if (stack.getTag() != null) {
-            energyStorage.read(stack.getTag());
+        CompoundTag nbt = CoFHItemData.getTag(stack);
+        if (!nbt.isEmpty()) {
+            energyStorage.read(nbt);
         }
         super.onPlaced(stack);
         return this;
@@ -129,7 +132,7 @@ public class EnergyMinecart extends AugmentableMinecart implements MenuProvider 
     @Override
     public ItemStack createItemStackTag(ItemStack stack) {
 
-        energyStorage.writeWithParams(stack.getOrCreateTag());
+        CoFHItemData.updateTag(stack, energyStorage::writeWithParams);
         return super.createItemStackTag(stack);
     }
 

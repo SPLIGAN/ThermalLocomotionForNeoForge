@@ -2,6 +2,7 @@ package cofh.thermal.locomotion.common.entity;
 
 import cofh.core.common.entity.AbstractMinecartCoFH;
 import cofh.lib.util.Utils;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
@@ -14,12 +15,10 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
-import java.util.Map;
 
 import static cofh.thermal.core.ThermalCore.ITEMS;
 import static cofh.thermal.locomotion.init.registries.TLocEntities.UNDERWATER_CART;
@@ -45,12 +44,7 @@ public class UnderwaterMinecart extends AbstractMinecartCoFH {
     public UnderwaterMinecart onPlaced(ItemStack stack) {
 
         super.onPlaced(stack);
-
-        Map<Enchantment, Integer> enchantMap = EnchantmentHelper.deserializeEnchantments(enchantments);
-        if (enchantMap.containsKey(Enchantments.RESPIRATION)) {
-            int encRespiration = enchantMap.get(Enchantments.RESPIRATION);
-            this.respirationFactor = Math.max(1, encRespiration + 1);
-        }
+        updateRespirationFromEnchantments();
         return this;
     }
 
@@ -87,12 +81,14 @@ public class UnderwaterMinecart extends AbstractMinecartCoFH {
     public void readAdditionalSaveData(CompoundTag compound) {
 
         super.readAdditionalSaveData(compound);
+        updateRespirationFromEnchantments();
+    }
 
-        Map<Enchantment, Integer> enchantMap = EnchantmentHelper.deserializeEnchantments(enchantments);
-        if (enchantMap.containsKey(Enchantments.RESPIRATION)) {
-            int encRespiration = enchantMap.get(Enchantments.RESPIRATION);
-            this.respirationFactor = Math.max(1, encRespiration + 1);
-        }
+    protected void updateRespirationFromEnchantments() {
+
+        Holder<Enchantment> respiration = registryAccess().holderOrThrow(Enchantments.RESPIRATION);
+        int level = cartEnchantments.getLevel(respiration);
+        this.respirationFactor = level > 0 ? Math.max(1, level + 1) : 1;
     }
 
     @Override
@@ -107,24 +103,11 @@ public class UnderwaterMinecart extends AbstractMinecartCoFH {
             this.fallDistance = 0.0F;
             this.wasTouchingWater = true;
             this.clearFire();
-            // this.eyesInWater = this.areEyesInFluid(FluidTags.WATER);
         } else {
             this.wasTouchingWater = false;
         }
         return this.wasTouchingWater;
     }
-
-    //    @Override
-    //    public boolean areEyesInFluid(ITag<Fluid> tag) {
-    //
-    //        if (this.getRidingEntity() instanceof BoatEntity) {
-    //            return false;
-    //        } else {
-    //            double eyePos = this.getPosY() + 1.0D;
-    //            BlockPos pos = new BlockPos(this.getPosX(), eyePos, this.getPosZ());
-    //            return this.world.getFluidState(pos).isEntityInside(world, pos, this, eyePos, tag, true);
-    //        }
-    //    }
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {

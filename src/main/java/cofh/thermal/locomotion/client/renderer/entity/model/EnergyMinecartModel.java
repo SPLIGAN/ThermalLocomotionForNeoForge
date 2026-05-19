@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 
 public class EnergyMinecartModel<T extends Entity> extends HierarchicalModel<T> {
 
-    public static final ModelLayerLocation ENERGY_MINECART_LAYER = new ModelLayerLocation(new ResourceLocation("thermal:energy_minecart"), "main");
+    public static final ModelLayerLocation ENERGY_MINECART_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath("thermal", "energy_minecart"), "main");
 
     private final ModelPart root;
 

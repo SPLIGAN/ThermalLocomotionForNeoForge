@@ -25,7 +25,7 @@ import static cofh.lib.util.constants.ModIds.ID_THERMAL;
 
 public class FluidMinecartRenderer extends EntityRenderer<FluidMinecart> {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(ID_THERMAL + ":textures/entity/fluid_minecart.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ID_THERMAL, "textures/entity/fluid_minecart.png");
     protected final EntityModel<FluidMinecart> model;
 
     protected final AABB storageAABB = new AABB(-9.5 / 16.0, -6.5 / 16.0, -7.5 / 16.0, 9.5 / 16.0, 3.5 / 16.0, 7.5 / 16.0);
@@ -95,7 +95,7 @@ public class FluidMinecartRenderer extends EntityRenderer<FluidMinecart> {
         poseStackIn.scale(-1.0F, -1.0F, 1.0F);
         this.model.setupAnim(entityIn, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer ivertexbuilder = bufferIn.getBuffer(this.model.renderType(this.getTextureLocation(entityIn)));
-        this.model.renderToBuffer(poseStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, -1);
 
         FluidStack renderFluid = entityIn.getTank().getFluidStack();
 

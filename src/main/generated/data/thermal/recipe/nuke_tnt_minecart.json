@@ -1,0 +1,26 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "cofh_core:flag_set",
+      "flag": "thermal:nuclear_explosives"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "thermal:nuke_tnt"
+    },
+    "B": {
+      "item": "minecraft:minecart"
+    }
+  },
+  "pattern": [
+    "A",
+    "B"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thermal:nuke_tnt_minecart"
+  }
+}
