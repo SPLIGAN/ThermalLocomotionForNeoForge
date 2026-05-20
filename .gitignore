@@ -11,6 +11,8 @@
 
 # Other Files.
 !README.md
+!docs/
+!docs/**
 
 # Include git important files
 !.gitmodules
